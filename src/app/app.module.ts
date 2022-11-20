@@ -10,6 +10,8 @@ import {environment} from "../environments/environment";
 import {AngularFirestoreModule} from "@angular/fire/compat/firestore";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CategoriesComponent} from "./categories/categories.component";
+import { AllPostComponent } from './posts/all-post/all-post.component';
+import { NewPostComponent } from './posts/new-post/new-post.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import {CategoriesComponent} from "./categories/categories.component";
     NavbarComponent,
     FooterComponent,
     DashboardComponent,
-    CategoriesComponent
+    CategoriesComponent,
+    AllPostComponent,
+    NewPostComponent
   ],
   imports: [
     BrowserModule,
