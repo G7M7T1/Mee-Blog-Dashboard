@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
 import {CategoriesService} from "../../services/categories.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Post} from "../../models/post";
+import {PostsService} from "../../services/posts.service";
 
 @Component({
   selector: 'app-new-post',
@@ -19,9 +21,11 @@ export class NewPostComponent implements OnInit {
   }
 
   postForm: FormGroup
+  selectedImage: any;
 
   constructor(private categoryService: CategoriesService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private postService: PostsService) {
     this.postForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]],
       permalink: ['',[Validators.required]],
@@ -56,9 +60,38 @@ export class NewPostComponent implements OnInit {
     }
 
     reader.readAsDataURL($event.target.files[0])
+    this.selectedImage = $event.target.files[0]
   }
 
   onSubmit() {
-    console.log(this.postForm.value)
+    let categoryInfo = this.postForm.value.category.split('☀')
+
+    const postData: Post = {
+      title: this.postForm.value.title,
+
+      permalink: this.postForm.value.permalink,
+
+      category: {category: categoryInfo[1], categoryId: categoryInfo[0]},
+
+      postImgPath: "",
+
+      excerpt: this.postForm.value.excerpt,
+
+      content: this.postForm.value.content,
+
+      createdAt: new Date(),
+
+      isFeatured: false,
+
+      status: "new",
+
+      views: 0
+    }
+
+    this.postService.uploadImage(this.selectedImage, postData).then(r => console.log('200'))
+
+    this.postForm.reset()
+
+    this.imgSrc = `https://cdn.discordapp.com/attachments/705034399200313465/1043988893046952078/unknown.png`
   }
 }

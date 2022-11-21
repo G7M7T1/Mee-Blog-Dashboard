@@ -21,7 +21,7 @@
       <label for="Category" class="block mb-1 ml-1">Category</label>
       <select formControlName = "category" id="Category" class="rounded bg-gray-800 text-white w-full px-3 py-2">
         <option value="" class="text-white"> Please Select A Category</option>
-        <option *ngFor="let category of categories; let i = index" class="text-white">{{category?.data.category}}</option>
+        <option *ngFor="let category of categories; let i = index" value="{{category.id}}☀{{category.data.category}}" class="text-white">{{category?.data.category}}</option>
       </select>
     </div>
 
