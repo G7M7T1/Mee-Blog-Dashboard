@@ -1,47 +1,49 @@
 <section class="p-6 dark:text-gray-100">
-  <form [formGroup]="postForm" (ngSubmit)="onSubmit()" class="container w-full max-w-3xl p-8 mx-auto space-y-6 rounded-md shadow dark:bg-gray-900 ng-untouched ng-pristine ng-valid">
-    <h2 class="w-full text-3xl font-bold leading-tight">New Post</h2>
+  <div *ngIf="postForm">
+    <form [formGroup]="postForm" (ngSubmit)="onSubmit()" class="container w-full max-w-3xl p-8 mx-auto space-y-6 rounded-md shadow dark:bg-gray-900 ng-untouched ng-pristine ng-valid">
+      <h2 class="w-full text-3xl font-bold leading-tight">{{formStatus}} Post</h2>
 
-    <div>
-      <label for="Title" class="block mb-1 ml-1">Title</label>
-      <input formControlName = "title" (keyup)="onTitleChanged($event)" id="Title" type="text" placeholder="Post Title" required class="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-purple-400 bg-gray-800">
-    </div>
-
-    <div>
-      <label for="Permalink" class="block mb-1 ml-1">Permalink</label>
-      <input formControlName = "permalink" [(ngModel)]="permalink" name="permalink" id="Permalink" type="text" placeholder="Post Permalink" required class="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-purple-400 dark:bg-gray-800">
-    </div>
-
-    <div>
-      <label for="Excerpt" class="block mb-1 ml-1">Excerpt</label>
-      <textarea formControlName = "excerpt" id="Excerpt" type="text" placeholder="Post Excerpt..." required class="block w-full p-2 rounded autoexpand focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-purple-400 dark:bg-gray-800" style="min-height: 100px;"></textarea>
-    </div>
-
-    <div>
-      <label for="Category" class="block mb-1 ml-1">Category</label>
-      <select formControlName = "category" id="Category" class="rounded bg-gray-800 text-white w-full px-3 py-2">
-        <option value="" class="text-white"> Please Select A Category</option>
-        <option *ngFor="let category of categories; let i = index" value="{{category.id}}☀{{category.data.category}}" class="text-white">{{category?.data.category}}</option>
-      </select>
-    </div>
-
-    <div class="w-full space-y-1 dark:text-gray-100">
-      <label for="files" class="block mb-1 ml-1">Post Image</label>
-      <img [src]="imgSrc" class="pb-12 pt-6 mx-auto" alt="Image Post">
-      <div class="flex">
-        <input formControlName = "postImg" (change)="showPreview($event)" type="file" accept="image/*" id="files" class="px-8 py-12 w-full border-2 border-dashed rounded-md dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
+      <div>
+        <label for="Title" class="block mb-1 ml-1">Title</label>
+        <input formControlName = "title" (keyup)="onTitleChanged($event)" id="Title" type="text" placeholder="Post Title" required class="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-purple-400 bg-gray-800">
       </div>
-    </div>
 
-    <div>
-      <label for="Content" class="block mb-1 ml-1">Content</label>
-      <angular-editor [config]="editorConfig" formControlName = "content" class="text-purple-400" id="Content" placeholder="Enter The Content At Here"></angular-editor>
-    </div>
+      <div>
+        <label for="Permalink" class="block mb-1 ml-1">Permalink</label>
+        <input formControlName = "permalink" [(ngModel)]="permalink" name="permalink" id="Permalink" type="text" placeholder="Post Permalink" required class="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-purple-400 dark:bg-gray-800">
+      </div>
 
-    <div>
-      <button [ngClass]="postForm.invalid ? 'text-gray-900' : 'text-white'" [disabled]="postForm.invalid" type="submit" class="w-full px-4 py-2 font-bold rounded shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 dark:bg-purple-400 focus:ring-purple-400 hover:ring-purple-400">Send</button>
-      <button routerLink="/" class="mt-3 w-full px-4 py-2 font-bold rounded shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 bg-red-500 focus:ring-purple-400 hover:ring-red-500 text-white">Back Home</button>
-    </div>
+      <div>
+        <label for="Excerpt" class="block mb-1 ml-1">Excerpt</label>
+        <textarea formControlName = "excerpt" id="Excerpt" type="text" placeholder="Post Excerpt..." required class="block w-full p-2 rounded autoexpand focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-purple-400 dark:bg-gray-800" style="min-height: 100px;"></textarea>
+      </div>
 
-  </form>
+      <div>
+        <label for="Category" class="block mb-1 ml-1">Category</label>
+        <select formControlName = "category" id="Category" class="rounded bg-gray-800 text-white w-full px-3 py-2">
+          <option value="" class="text-white"> Please Select A Category</option>
+          <option *ngFor="let category of categories; let i = index" value="{{category.id}}☀{{category.data.category}}" class="text-white">{{category?.data.category}}</option>
+        </select>
+      </div>
+
+      <div class="w-full space-y-1 dark:text-gray-100">
+        <label for="files" class="block mb-1 ml-1">Post Image</label>
+        <img [src]="imgSrc" class="pb-12 pt-6 mx-auto" alt="Image Post">
+        <div class="flex">
+          <input formControlName = "postImg" (change)="showPreview($event)" type="file" accept="image/*" id="files" class="px-8 py-12 w-full border-2 border-dashed rounded-md dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
+        </div>
+      </div>
+
+      <div>
+        <label for="Content" class="block mb-1 ml-1">Content</label>
+        <angular-editor [config]="editorConfig" formControlName = "content" class="text-purple-400" id="Content" placeholder="Enter The Content At Here"></angular-editor>
+      </div>
+
+      <div>
+        <button [ngClass]="postForm.invalid ? 'text-gray-900' : 'text-white'" [disabled]="postForm.invalid" type="submit" class="w-full px-4 py-2 font-bold rounded shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 dark:bg-purple-400 focus:ring-purple-400 hover:ring-purple-400">Send</button>
+        <button routerLink="/" class="mt-3 w-full px-4 py-2 font-bold rounded shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 bg-red-500 focus:ring-purple-400 hover:ring-red-500 text-white">Back Home</button>
+      </div>
+
+    </form>
+  </div>
 </section>

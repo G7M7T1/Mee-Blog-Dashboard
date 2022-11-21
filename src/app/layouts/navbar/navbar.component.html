@@ -17,6 +17,14 @@
         <li>
           <a target="_blank" href="#" class="block py-2 pl-3 pr-4 rounded md:border-0 md:hover:text-blue-700 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent">Main Web</a>
         </li>
+
+        <li *ngIf="isLoggedIn$ | async">
+          <a class="block py-2 pl-3 pr-4 rounded md:border-0 md:hover:text-blue-700 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent">{{userEmail}}</a>
+        </li>
+
+        <li *ngIf="isLoggedIn$ | async">
+          <a (click)="onLogout()" class="block py-2 pl-3 pr-4 rounded md:border-0 md:hover:text-blue-700 md:p-0 text-gray-400 md:hover:text-white cursor-pointer hover:bg-gray-700 hover:text-white md:hover:bg-transparent">Logout</a>
+        </li>
       </ul>
     </div>
   </div>

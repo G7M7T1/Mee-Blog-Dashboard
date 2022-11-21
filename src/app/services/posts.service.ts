@@ -3,6 +3,7 @@ import {AngularFireStorage} from "@angular/fire/compat/storage";
 import {Post} from "../models/post";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
 import {map} from "rxjs";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,11 @@ import {map} from "rxjs";
 export class PostsService {
 
   constructor(private storage: AngularFireStorage,
-              private afs: AngularFirestore) {
+              private afs: AngularFirestore,
+              private router: Router) {
   }
 
-  async uploadImage(selectedImage: any, postData: Post) {
+  async uploadImage(selectedImage: any, postData: Post, formStatus: string, id: any) {
     const filePath = `postIMG/${Date.now()}`
 
     await this.storage.upload(filePath, selectedImage)
@@ -24,7 +26,12 @@ export class PostsService {
     await this.storage.ref(filePath).getDownloadURL().subscribe(URL => {
       postData.postImgPath = URL
       console.log(URL)
-      this.saveData(postData)
+
+      if (formStatus == 'Edit') {
+        this.updateData(id, postData)
+      } else {
+        this.saveData(postData)
+      }
     })
   }
 
@@ -32,6 +39,7 @@ export class PostsService {
     this.afs.collection('posts').add(postData)
       .then(docRef => {
         console.log("Done")
+        this.router.navigate(['/posts'])
       })
   }
 
@@ -43,5 +51,35 @@ export class PostsService {
         return {id, data}
       }))
     )
+  }
+
+  loadOneData(id: string) {
+    return this.afs.collection('posts').doc(id).valueChanges()
+  }
+
+  updateData(id: string, postData: any) {
+    this.afs.doc(`posts/${id}`).update(postData)
+      .then(() => {
+        console.log('Done')
+        this.router.navigate(['/posts'])
+      })
+  }
+
+  deleteImage(postImgPath: string, id:string) {
+    this.storage.storage.refFromURL(postImgPath).delete()
+      .then(() => {
+        console.log('Image Deleted')
+        this.deleteData(id)
+      })
+  }
+
+  deleteData(id: string) {
+    this.afs.doc(`posts/${id}`).delete()
+      .then(() => console.log('Data Deleted'))
+  }
+
+  markFeatured(id:string, featuredData: any) {
+    this.afs.doc(`posts/${id}`).update(featuredData)
+      .then(() => console.log('Featured Updated'))
   }
 }

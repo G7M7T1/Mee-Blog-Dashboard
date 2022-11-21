@@ -15,6 +15,8 @@ import { NewPostComponent } from './posts/new-post/new-post.component';
 import {AngularEditorModule} from "@kolkov/angular-editor";
 import {HttpClientModule} from "@angular/common/http";
 import {AngularFireStorageModule} from "@angular/fire/compat/storage";
+import { LoginComponent } from './auth/login/login.component';
+import {AngularFireAuthModule} from "@angular/fire/compat/auth";
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import {AngularFireStorageModule} from "@angular/fire/compat/storage";
     DashboardComponent,
     CategoriesComponent,
     AllPostComponent,
-    NewPostComponent
+    NewPostComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +38,8 @@ import {AngularFireStorageModule} from "@angular/fire/compat/storage";
     ReactiveFormsModule,
     AngularEditorModule,
     HttpClientModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    AngularFireAuthModule
   ],
   providers: [],
   bootstrap: [AppComponent]

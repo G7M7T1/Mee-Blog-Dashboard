@@ -7,34 +7,27 @@
       Manage All Your Post At Our Mee Blog Dashboard
     </p>
 
-
     <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
-      <div class="overflow-hidden bg-cover rounded-lg cursor-pointer h-96 group"
-           style="background-image:url('https://images.unsplash.com/photo-1621111848501-8d3634f82336?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1565&q=80')">
+
+      <div *ngFor="let post of postList; let i = index" class="overflow-hidden bg-cover bg-center rounded-lg cursor-pointer h-96 group"
+           style="background-image:url({{post.data.postImgPath}})">
         <div
           class="flex flex-col justify-center w-full h-full px-8 py-4 transition-opacity duration-700 opacity-0 backdrop-blur-sm bg-gray-800/60 group-hover:opacity-100">
-          <h2 class="mt-4 text-2xl font-semibold text-white capitalize">Best website collections</h2>
-          <p class="mt-2 text-lg tracking-wider text-blue-400 uppercase ">Website</p>
+          <h2 class="mt-4 text-2xl font-semibold text-white capitalize">{{post.data.title}}</h2>
+          <p class="mt-2 text-lg tracking-wider text-white uppercase ">{{post.data.category.category}} |  Views: {{post.data.views}}</p>
+          <p class="mt-2 text-lg tracking-wider text-blue-200 uppercase ">{{post.data.createdAt.toMillis() | date}}</p>
+          <p class="mt-2 text-lg tracking-wider uppercase ">
+            <a routerLink="/posts/new" [queryParams]="{id: post.id}" class="text-green-500 font-extrabold">Edit</a>
+            <a (click)="onDelete(post.data.postImgPath, post.id)" class="text-red-500 mx-2 font-extrabold">Delete</a>
+          </p>
+
+          <p class="mt-4 text-lg tracking-wider uppercase ">
+            <a *ngIf="!post.data.isFeatured" (click)="onFeatured(post.id, true)" class="bg-orange-500 text-white font-bold px-3 py-1.5 rounded">Mark Featured</a>
+            <a *ngIf="post.data.isFeatured" (click)="onFeatured(post.id, false)" class="bg-pink-500 text-white font-bold px-3 py-1.5 rounded">Remove Featured</a>
+          </p>
         </div>
       </div>
 
-      <div class="overflow-hidden bg-cover rounded-lg cursor-pointer h-96 group"
-           style="background-image:url('https://images.unsplash.com/photo-1621609764180-2ca554a9d6f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80')">
-        <div
-          class="flex flex-col justify-center w-full h-full px-8 py-4 transition-opacity duration-700 opacity-0 backdrop-blur-sm bg-gray-800/60 group-hover:opacity-100">
-          <h2 class="mt-4 text-2xl font-semibold text-white capitalize">Block of Ui kit collections</h2>
-          <p class="mt-2 text-lg tracking-wider text-blue-400 uppercase ">Ui kit</p>
-        </div>
-      </div>
-
-      <div class="overflow-hidden bg-cover rounded-lg cursor-pointer h-96 group"
-           style="background-image:url('https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')">
-        <div
-          class="flex flex-col justify-center w-full h-full px-8 py-4 transition-opacity duration-700 opacity-0 backdrop-blur-sm bg-gray-800/60 group-hover:opacity-100">
-          <h2 class="mt-4 text-2xl font-semibold text-white capitalize">Ton’s of mobile mockup</h2>
-          <p class="mt-2 text-lg tracking-wider text-blue-400 uppercase ">Mockups</p>
-        </div>
-      </div>
     </div>
   </div>
 </section>

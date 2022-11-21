@@ -4,6 +4,8 @@ import {CategoriesService} from "../../services/categories.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Post} from "../../models/post";
 import {PostsService} from "../../services/posts.service";
+import {ActivatedRoute} from "@angular/router";
+import {doc} from "@angular/fire/firestore";
 
 @Component({
   selector: 'app-new-post',
@@ -15,24 +17,55 @@ export class NewPostComponent implements OnInit {
   imgSrc: any = "https://cdn.discordapp.com/attachments/705034399200313465/1043988893046952078/unknown.png"
   categories: Array<any> | undefined
 
+  formStatus: string = "Add New"
+
   editorConfig: AngularEditorConfig = {
     editable: true,
     minHeight: '200px',
   }
 
-  postForm: FormGroup
+  postForm: FormGroup | any
   selectedImage: any;
+
+  post: any
+
+  docId: string | undefined
 
   constructor(private categoryService: CategoriesService,
               private fb: FormBuilder,
-              private postService: PostsService) {
-    this.postForm = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(2)]],
-      permalink: ['',[Validators.required]],
-      excerpt: ['',[Validators.required]],
-      category: ['',[Validators.required]],
-      postImg: ['',[Validators.required]],
-      content: ['',[Validators.required]]
+              private postService: PostsService,
+              private route: ActivatedRoute) {
+
+    this.route.queryParams.subscribe(value => {
+      this.docId = value['id']
+
+      if (this.docId) {
+        this.postService.loadOneData(value['id']).subscribe(post => {
+
+          this.post = post
+
+          this.postForm = this.fb.group({
+            title: [this.post.title, [Validators.required, Validators.minLength(2)]],
+            permalink: [this.post.permalink, [Validators.required]],
+            excerpt: [this.post.excerpt, [Validators.required]],
+            category: [`${this.post.category.categoryId}☀${this.post.category.category}`, [Validators.required]],
+            postImg: ['', [Validators.required]],
+            content: [this.post.content, [Validators.required]]
+          })
+
+          this.formStatus = "Edit"
+          this.imgSrc = this.post.postImgPath
+        })
+      } else {
+        this.postForm = this.fb.group({
+          title: ['', [Validators.required, Validators.minLength(2)]],
+          permalink: ['', [Validators.required]],
+          excerpt: ['', [Validators.required]],
+          category: ['', [Validators.required]],
+          postImg: ['', [Validators.required]],
+          content: ['', [Validators.required]]
+        })
+      }
     })
   }
 
@@ -88,7 +121,7 @@ export class NewPostComponent implements OnInit {
       views: 0
     }
 
-    this.postService.uploadImage(this.selectedImage, postData).then(r => console.log('200'))
+    this.postService.uploadImage(this.selectedImage, postData, this.formStatus, this.docId).then(r => console.log('200'))
 
     this.postForm.reset()
 
